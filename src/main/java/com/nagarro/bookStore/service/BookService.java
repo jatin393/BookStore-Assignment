@@ -13,10 +13,11 @@ public interface BookService {
 	public List<BookStore> getAllBooks();
 
 	public List<BookStore> searchBooks(String keyword);
-	
+
 	public BookStore updateBooks(BookStore book, int bId);
 
 	public BookStore getBook(int bId);
 
 	public List<BookStore> searchDataByFact(BookStore books);
+
 }

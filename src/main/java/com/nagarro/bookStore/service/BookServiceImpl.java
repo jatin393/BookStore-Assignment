@@ -70,12 +70,12 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<BookStore> searchDataByFact(BookStore books) {
-		
-		// To F ind Books Based On Three Condition 
+
+		// To Find Books Based On Three Condition
 		String Isbn1 = books.getIsbn();
 		String author1 = books.getAuthor();
 		String title1 = books.getTitle();
-		
+
 		List<BookStore> bookResult = this.bookRepo.findByIsbnAndAuthorAndTitle(Isbn1, author1, title1);
 		return bookResult;
 	}

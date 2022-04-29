@@ -1,6 +1,5 @@
 package com.nagarro.bookStore.model;
 
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,17 +19,24 @@ public class BookStore {
 	private String title;
 	private String author;
 	private double price;
+	private int orderQuantity;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "books")
-	private List<Quantity> quantity;
-
-	public BookStore(int bId, String isbn, String title, String author, double price, List<Quantity> quantity) {
+	public BookStore(int bId, String isbn, String title, String author, double price, int orderQuantity) {
+		super();
 		this.bId = bId;
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
 		this.price = price;
-		this.quantity = quantity;
+		this.orderQuantity = orderQuantity;
+	}
+
+	public int getOrderQuantity() {
+		return orderQuantity;
+	}
+
+	public void setOrderQuantity(int orderQuantity) {
+		this.orderQuantity = orderQuantity;
 	}
 
 	public BookStore() {
@@ -78,18 +84,10 @@ public class BookStore {
 		this.price = price;
 	}
 
-	public List<Quantity> getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(List<Quantity> quantity) {
-		this.quantity = quantity;
-	}
-
 	@Override
 	public String toString() {
 		return "BookStore [bId=" + bId + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", price="
-				+ price + ", quantity=" + quantity + "]";
+				+ price + ", orderQuantity=" + orderQuantity + "]";
 	}
 
 }
