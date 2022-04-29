@@ -23,9 +23,6 @@ public class Controller {
 	@Autowired
 	private BookService service;
 
-	@Autowired
-	private BooksDao dao;
-
 //	@PostMapping("/book")
 //	public BookStore addBook(@RequestBody BookStore b) {
 //		return this.service.addBook(b);
@@ -83,33 +80,14 @@ public class Controller {
 	@PutMapping("/addBook")
 	public BookStore addBooks(@RequestBody BookStore books) {
 		// If I don't want Number Of Copies To Be Inserted.
-		// If Results Already Present.
-		BookStore findIsbn = this.dao.findByIsbn(books.getIsbn());
-		if (findIsbn == null) {
-			books.setOrderQuantity(1);
-		} else {
-			// It Means The Isbn Is Already Present
-			int count = findIsbn.getOrderQuantity();
-			findIsbn.setOrderQuantity(count + 1);
-			return this.dao.save(findIsbn);
-		}
-		return this.dao.save(books);
+		BookStore book = this.service.addBooksWithoutCopy(books);
+		return book;
 	}
 
 	@PutMapping("/addBook/{quantity}")
 	public BookStore addBooks(@RequestBody BookStore books, @PathVariable("quantity") int quantity) {
 		// If I Add The Number Of Copies Of A Particular Book
-		// If Results Already Present
-		BookStore findIsbn = this.dao.findByIsbn(books.getIsbn());
-		if (findIsbn == null) {
-			books.setOrderQuantity(quantity);
-		} else {
-			// It Means The Isbn Is Already Present
-			int count = findIsbn.getOrderQuantity();
-			int copies = count + quantity;
-			findIsbn.setOrderQuantity(copies);
-			return this.dao.save(findIsbn);
-		}
-		return this.dao.save(books);
+		BookStore book = this.service.addBooksWithCopy(books, quantity);
+		return book;
 	}
 }

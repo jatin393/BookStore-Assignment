@@ -20,4 +20,8 @@ public interface BookService {
 
 	public List<BookStore> searchDataByFact(BookStore books);
 
+	public BookStore addBooksWithCopy(BookStore books, int quantity);
+
+	public BookStore addBooksWithoutCopy(BookStore books);
+
 }
