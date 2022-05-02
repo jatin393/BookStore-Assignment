@@ -1,0 +1,8 @@
+2022-05-02 15:27:40 [restartedMain] INFO  c.n.bookStore.BookStoreApplication -
+				Starting BookStoreApplication using Java 16.0.2 on jatinguru with PID 8692 (C:\Users\jatinguru\Downloads\bookStore\target\classes started by jatinguru in C:\Users\jatinguru\Downloads\bookStore)
+2022-05-02 15:27:40 [restartedMain] DEBUG c.n.bookStore.BookStoreApplication -
+				Running with Spring Boot v2.6.7, Spring v5.3.19
+2022-05-02 15:27:40 [restartedMain] INFO  c.n.bookStore.BookStoreApplication -
+				No active profile set, falling back to 1 default profile: "default"
+2022-05-02 15:27:41 [restartedMain] INFO  c.n.bookStore.BookStoreApplication -
+				Started BookStoreApplication in 0.884 seconds (JVM running for 1338.788)

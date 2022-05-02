@@ -1,7 +1,8 @@
 package com.nagarro.bookStore.controller;
 
 import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +12,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.nagarro.bookStore.bookDao.BooksDao;
 import com.nagarro.bookStore.model.BookStore;
 import com.nagarro.bookStore.service.BookService;
 
 @RestController
 @RequestMapping("/bookStore")
 public class Controller {
+
+	// Create Object For Logger
+	Logger logger = LoggerFactory.getLogger(Controller.class);
 
 	@Autowired
 	private BookService service;
@@ -31,11 +33,15 @@ public class Controller {
 	@GetMapping("/{keyword}")
 	public ResponseEntity<?> Search(@PathVariable("keyword") String keyword) {
 		// Find The Result By Only One Keyword.
+		logger.debug("Request {}", keyword);
 		List<BookStore> result = this.service.searchBook(keyword);
 		if (result.size() == 0) {
+			logger.warn("Invalid Input");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data Not Found !!");
 		}
 		// If Book Found
+		logger.info("Data Found With Corresponding Keyword");
+		logger.debug("Response {}", result);
 		return ResponseEntity.ok(result);
 	}
 
@@ -44,15 +50,26 @@ public class Controller {
 		// Get All Books
 		List<BookStore> books = this.service.getAllBooks();
 		if (books.size() <= 0) {
+			logger.error("Data Not Present");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		logger.info("Data Found");
+		logger.debug("Response {}", books);
 		return ResponseEntity.ok(books);
 	}
 
 	@PutMapping("/updateBook/{bId}")
 	// Update Particular Book
 	public BookStore updateBook(@RequestBody BookStore book, @PathVariable("bId") int bId) {
-		return this.service.updateBooks(book, bId);
+		BookStore books = this.service.updateBooks(book, bId);
+		if (books == null) {
+			logger.error("Current Id Doesn't Belongs To The Actual Data That Already Present");
+			return null;
+		}
+		logger.info("Data Updated");
+		logger.debug("Response {}", books);
+		return books;
+
 	}
 
 	@GetMapping("/getBook/{bId}")
@@ -60,8 +77,11 @@ public class Controller {
 	public ResponseEntity<?> getBook(@PathVariable int bId) {
 		BookStore result = this.service.getBook(bId);
 		if (result == null) {
+			logger.error("Data Not Found With The Corresponding BookId");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data Not Found !!");
 		}
+		logger.info("Data Found With The Corresponding BookId");
+		logger.debug("Response {}", result);
 		return ResponseEntity.ok(result);
 	}
 
@@ -72,8 +92,11 @@ public class Controller {
 
 		List<BookStore> result = this.service.searchDataByFact(books);
 		if (result == null) {
+			logger.info("Please Enter Correct Data To Fetch The Result");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data Not Found");
 		}
+		logger.info("Getting Result");
+		logger.debug("Response {}", result);
 		return ResponseEntity.ok(result);
 	}
 
@@ -81,6 +104,8 @@ public class Controller {
 	public BookStore addBooks(@RequestBody BookStore books) {
 		// If I don't want Number Of Copies To Be Inserted.
 		BookStore book = this.service.addBooksWithoutCopy(books);
+		logger.info("Adding Data");
+		logger.debug("Response {}", book);
 		return book;
 	}
 
@@ -88,6 +113,8 @@ public class Controller {
 	public BookStore addBooks(@RequestBody BookStore books, @PathVariable("quantity") int quantity) {
 		// If I Add The Number Of Copies Of A Particular Book
 		BookStore book = this.service.addBooksWithCopy(books, quantity);
+		logger.info("Adding Data Having Multiple Copies");
+		logger.debug("Response {}", book);
 		return book;
 	}
 }
