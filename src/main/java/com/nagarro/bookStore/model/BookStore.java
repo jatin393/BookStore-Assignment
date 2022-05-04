@@ -1,19 +1,20 @@
 package com.nagarro.bookStore.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 
+/**
+ * @author jatinguru
+ *
+ */
 @Entity
 public class BookStore {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	private int bId;
 	private String isbn;
 	private String title;

@@ -15,24 +15,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nagarro.bookStore.model.BookStore;
 import com.nagarro.bookStore.service.BookService;
 
+/**
+ * @RestController It's a convenient annotation that combines @Controller
+ *                 and @ResponseBody
+ */
 @RestController
 @RequestMapping("/bookStore")
 public class Controller {
 
-	// Create Object For Logger
+	/**
+	 * In Java, logging is an important feature that helps developers to trace out
+	 * the errors. It provides the complete tracing information of the application.
+	 * It records the critical failure if any occur in an application.
+	 */
 	Logger logger = LoggerFactory.getLogger(Controller.class);
 
 	@Autowired
 	private BookService service;
 
-//	@PostMapping("/book")
-//	public BookStore addBook(@RequestBody BookStore b) {
-//		return this.service.addBook(b);
-//	}
-
 	@GetMapping("/{keyword}")
 	public ResponseEntity<?> Search(@PathVariable("keyword") String keyword) {
-		// Find The Result By Only One Keyword.
+
 		logger.debug("Request {}", keyword);
 		List<BookStore> result = this.service.searchBook(keyword);
 		if (result.size() == 0) {
