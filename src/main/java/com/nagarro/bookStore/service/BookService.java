@@ -3,6 +3,7 @@ package com.nagarro.bookStore.service;
 import java.util.List;
 
 import com.nagarro.bookStore.model.BookStore;
+import com.nagarro.bookStore.model.Media;
 
 public interface BookService {
 
@@ -23,5 +24,9 @@ public interface BookService {
 	public BookStore addBooksWithCopy(BookStore books, int quantity);
 
 	public BookStore addBooksWithoutCopy(BookStore books);
+
+	public void getMedia(List<String> myList, Media media);
+
+	public BookStore findTitle(String title);
 
 }

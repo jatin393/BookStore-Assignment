@@ -1,5 +1,12 @@
 package com.nagarro.bookStore.controller;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.nagarro.bookStore.model.BookStore;
+import com.nagarro.bookStore.model.Media;
 import com.nagarro.bookStore.service.BookService;
 
 /**
@@ -120,4 +128,44 @@ public class Controller {
 		logger.debug("Response {}", book);
 		return book;
 	}
+	
+	@GetMapping("/callApi")
+	// This media is used to call Json Api
+	public int getMedia(@RequestBody Media media) throws IOException, InterruptedException {
+		var url = "https://jsonplaceholder.typicode.com/posts";
+		var request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
+		var client = HttpClient.newBuilder().build();
+		var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//		HttpResponse<String>jsonCall = response;
+		String result3 = response.body();
+		List<String> myList = new ArrayList<String>(Arrays.asList(result3.split(",")));
+		this.service.getMedia(myList,media);
+		System.out.println(myList);
+//		System.out.println(response.body());
+//		System.out.println(jsonCall);
+		return response.statusCode();
+	}
+	
+	// Created RestApi to Buying a Book
+	@GetMapping("/purchase")
+	public ResponseEntity<?> BookBuy(@RequestBody BookStore book){
+		int totalCost = 0 ;
+		String str = book.getTitle();
+		String result[] = str.split(",");
+		for(String ans : result) {
+//			System.out.println(ans);
+			BookStore getResult = this.service.findTitle(ans);
+			if(getResult == null) {
+			   continue;	
+			}
+			else {
+				// To Find Price of the result to calculate the estimation cost.
+					totalCost += getResult.getPrice() * getResult.getOrderQuantity();
+			}
+			
+		}
+		return ResponseEntity.ok(totalCost);
+		
+	}
+
 }

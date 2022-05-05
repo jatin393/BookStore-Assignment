@@ -1,12 +1,14 @@
 package com.nagarro.bookStore.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nagarro.bookStore.bookDao.BooksDao;
 import com.nagarro.bookStore.model.BookStore;
+import com.nagarro.bookStore.model.Media;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -160,6 +162,30 @@ public class BookServiceImpl implements BookService {
 			return this.bookRepo.save(findIsbn);
 		}
 		return this.bookRepo.save(books);
+	}
+
+	@Override
+	public void getMedia(List<String> myList, Media media) {
+		// Fetching records from the list
+		String title = media.getTitle();
+		for (@SuppressWarnings("unused")
+		String result : myList) {
+			for (int i = 0; i < 4; i++) {
+				if (title == media.getTitle()) {
+					System.out.println(media);
+				}
+			}
+		}
+	}
+
+	@Override
+	public BookStore findTitle(String title) {
+		BookStore result = this.bookRepo.findByTitle(title);
+		if (result == null) {
+			return null;
+		}
+		return result;
+
 	}
 
 }

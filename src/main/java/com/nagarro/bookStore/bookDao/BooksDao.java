@@ -20,4 +20,6 @@ public interface BooksDao extends JpaRepository<BookStore, Integer> {
 	public List<BookStore> findByIsbnAndAuthorAndTitle(String isbn, String author, String title);
 
 	public BookStore findByIsbn(String isbn);
+
+	public BookStore findByTitle(String title);
 }
