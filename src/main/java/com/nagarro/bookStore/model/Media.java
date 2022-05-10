@@ -8,7 +8,7 @@ public class Media {
 	private String body;
 
 	public Media() {
-		super();
+
 	}
 
 	public Media(int userId, int id, String title, String body) {
