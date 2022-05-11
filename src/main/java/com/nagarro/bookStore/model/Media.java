@@ -53,7 +53,7 @@ public class Media {
 
 	@Override
 	public String toString() {
-		return "Media [userId=" + userId + ", id=" + id + ", title=" + title + ", body=" + body + "]";
+		return "Media [userId= " + userId + " , id=" + id + ", title=" + title + ", body=" + body + "]";
 	}
 
 }

@@ -1,12 +1,11 @@
 package com.nagarro.bookStore.controller;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class Controller {
 	/**
 	 * In Java, logging is an important feature that helps developers to trace out
 	 * the errors. It provides the complete tracing information of the application.
-	 * It records the critical failure if any occur in an application.
+	 * It records the critical failure if any occur in an application..
 	 */
 	Logger logger = LoggerFactory.getLogger(Controller.class);
 

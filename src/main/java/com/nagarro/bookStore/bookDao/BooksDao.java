@@ -10,7 +10,7 @@ public interface BooksDao extends JpaRepository<BookStore, Integer> {
 	/**
 	 * @param isbn   indicates a unique number or code for each book.
 	 * @param author is the writer of a particular book.
-	 * @param title  shows the highlight of a book.
+	 * @param title  shows the highlight of a book..
 	 * @return
 	 */
 	public List<BookStore> findByIsbnOrAuthorOrTitle(String isbn, String author, String title);
