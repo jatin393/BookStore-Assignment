@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author jatinguru
@@ -17,7 +18,9 @@ public class BookStore {
 
 	private int bId;
 	private String isbn;
+	@NotBlank
 	private String title;
+	@NotBlank
 	private String author;
 	private double price;
 	private int orderQuantity;

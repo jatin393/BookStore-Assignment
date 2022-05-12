@@ -7,6 +7,9 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +117,7 @@ public class Controller {
 	}
 
 	@PutMapping("/addBook")
-	public BookStore addBooks(@RequestBody BookStore books) {
+	public BookStore addBooks(@Valid @RequestBody BookStore books) {
 		// If I don't want Number Of Copies To Be Inserted.
 		BookStore book = this.service.addBooksWithoutCopy(books);
 		logger.info("Adding Data");
@@ -159,7 +162,7 @@ public class Controller {
 				System.out.println("Present");
 				arr.add(medias[i]);
 				System.out.println(arr);
-				count++;
+				count++;   
 			}
 		}
 		if (count == 0) {
@@ -167,7 +170,7 @@ public class Controller {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data Not Found.");
 		}
 		logger.info("Data Found");
-		return ResponseEntity.ok(arr);
+		return ResponseEntity.ok(arr); 
 	}
 
 	// Created RestApi to Buying a Book
