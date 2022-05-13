@@ -149,66 +149,14 @@ public class Controller {
 //		System.out.println(response.body());
 //		System.out.println(jsonCall);
 //		return response.statusCode();
-		ArrayList<Media> arr = new ArrayList<>();
-		logger.info("Calling Json Url");
-		Media[] medias = RestAssured.get("https://jsonplaceholder.typicode.com/posts").as(Media[].class);
-		arr.clear();
-		int count = 0;
-		String data = input.getTitle();
-		for (int i = 0; i < medias.length; i++) {
-			String title = medias[i].getTitle();
-			String body = medias[i].getBody();
-			if (title.contains(data) || body.contains(data)) {
-				System.out.println("Present");
-				arr.add(medias[i]);
-				System.out.println(arr);
-				count++;   
-			}
-		}
-		if (count == 0) {
-			logger.error("Data Not Present Or Invalid Input");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data Not Found.");
-		}
-		logger.info("Data Found");
-		return ResponseEntity.ok(arr); 
+		return this.service.getMediaPost(input, logger);
 	}
 
 	// Created RestApi to Buying a Book
 	@GetMapping("/purchase")
 	public ResponseEntity<?> BookBuy(@RequestBody BookStore book) {
-		int totalCost = 0;
-		// Creating ArrayList For Books That Are Invalid Or Not Present.
-//		ArrayList<String> list = new ArrayList<>();
-		String nf = "";
-		int count = 0;
-		String str = book.getTitle();
-		System.out.println(str);
-		String result[] = str.split(",");
-		logger.info("Fetching Result");
-		for (String ans : result) {
-			logger.debug(ans);
-			BookStore getResult = this.service.findTitle(ans);
-			if (getResult == null) {
-				System.out.println("......The Book Author " + ans + " Is Not Valid......");
-				nf += ans;
-				count++;
-				logger.warn("The Book Author Is not Valid");
-				continue;
-			} else {
-				// To Find Price of the result to calculate the estimation cost.
-				totalCost += getResult.getPrice() * getResult.getOrderQuantity();
-			}
-		}
-		String st = "";
-		if (count == 1) {
-			st += count + " Book Is Not Found, Either Invalid Name Of Author Or Not Present In Db." + "\n"
-					+ "Invalid Book Is " + nf;
-		} else if (count > 1) {
-			st += count + " Books Are Not Found, Either Invalid Name Of Author Or Not Present In Db." + "\n"
-					+ "Invalid Books Are " + nf;
-		}
-		return ResponseEntity.status(HttpStatus.FOUND)
-				.body("The Total Cost For The Book Purchase Is : " + totalCost + "\n" + st);
+
+		return this.service.buyBook(book, logger);
 	}
 
 }

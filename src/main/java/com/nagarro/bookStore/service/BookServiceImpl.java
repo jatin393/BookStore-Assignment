@@ -1,20 +1,28 @@
 package com.nagarro.bookStore.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.nagarro.bookStore.bookDao.BooksDao;
 import com.nagarro.bookStore.model.BookStore;
 import com.nagarro.bookStore.model.Media;
 
+import io.restassured.RestAssured;
+
 @Service
 public class BookServiceImpl implements BookService {
 
 	@Autowired
 	private BooksDao bookRepo;
+	
+	@Autowired
+	private BookService service;
 
 	/**
 	 * Add books to the bookstore
@@ -186,6 +194,70 @@ public class BookServiceImpl implements BookService {
 		}
 		return result;
 
+	}
+
+	@Override
+	public ResponseEntity<?> getMediaPost(Media input, Logger logger) {
+		ArrayList<Media> arr = new ArrayList<>();
+		logger.info("Calling Json Url");
+		Media[] medias = RestAssured.get("https://jsonplaceholder.typicode.com/posts").as(Media[].class);
+		arr.clear();
+		int count = 0;
+		String data = input.getTitle();
+		for (int i = 0; i < medias.length; i++) {
+			String title = medias[i].getTitle();
+			String body = medias[i].getBody();
+			if (title.contains(data) || body.contains(data)) {
+				System.out.println("Present");
+				arr.add(medias[i]);
+				System.out.println(arr);
+				count++;
+			}
+		}
+		if (count == 0) {
+			logger.error("Data Not Present Or Invalid Input");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data Not Found.");
+		}
+		logger.info("Data Found");
+		return ResponseEntity.ok(arr);
+
+	}
+
+	@Override
+	public ResponseEntity<?> buyBook(BookStore book, Logger logger) {
+		// Creating ArrayList For Books That Are Invalid Or Not Present.
+        // ArrayList<String> list = new ArrayList<>();
+		String nf = "";
+		int count = 0;
+		int totalCost = 0;
+		String str = book.getTitle();
+		System.out.println(str);
+		String result[] = str.split(",");
+		logger.info("Fetching Result");
+		for (String ans : result) {
+			logger.debug(ans);
+			BookStore getResult = this.service.findTitle(ans);
+			if (getResult == null) {
+				System.out.println("......The Book Author " + ans + " Is Not Valid......");
+				nf += ans;
+				count++;
+				logger.warn("The Book Author Is not Valid");
+				continue;
+			} else {
+				// To Find Price of the result to calculate the estimation cost.
+				totalCost += getResult.getPrice() * getResult.getOrderQuantity();
+			}
+		}
+		String st = "";
+		if (count == 1) {
+			st += count + " Book Is Not Found, Either Invalid Name Of Author Or Not Present In Db." + "\n"
+					+ "Invalid Book Is " + nf;
+		} else if (count > 1) {
+			st += count + " Books Are Not Found, Either Invalid Name Of Author Or Not Present In Db." + "\n"
+					+ "Invalid Books Are " + nf;
+		}
+		return ResponseEntity.status(HttpStatus.FOUND)
+				.body("The Total Cost For The Book Purchase Is : " + totalCost + "\n" + st);
 	}
 
 }
